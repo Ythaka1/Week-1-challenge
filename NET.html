@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Net Salary Calculator</title>
+</head>
+<body>
+    <h1>Net Salary Calculator</h1>
+
+    <script>
+        // Function to calculate PAYE, NHIF, NSSF, and Net Salary
+        function calculateNetSalary(basicSalary, benefits) {
+            const totalIncome = basicSalary + benefits;
+
+            // Tax brackets (assumed rates)
+            let payee = 0;
+
+            if (totalIncome <= 240000) { // Up to 240,000 KES
+                payee = 0;
+            } else if (totalIncome <= 323333) { // 240,001 to 323,333 KES
+                payee = (totalIncome - 240000) * 0.1; // 10% tax
+            } else if (totalIncome <= 500000) { // 323,334 to 500,000 KES
+                payee = (totalIncome - 323333) * 0.25 + (8333); // 25% tax
+            } else { // Above 500,000 KES
+                payee = (totalIncome - 500000) * 0.3 + (41667); // 30% tax
+            }
+
+            // NHIF deductions (assumed flat rate for demonstration)
+            let nhifDeduction = 1500; // Example flat rate for salaries above KES 100,000
+
+            // NSSF deductions (assumed flat rate for demonstration)
+            let nssfDeduction = basicSalary * 0.06; // 6% of basic salary
+
+            // Calculate gross and net salary
+            const grossSalary = totalIncome - payee - nhifDeduction - nssfDeduction;
+            const netSalary = totalIncome - payee - nhifDeduction - nssfDeduction;
+
+            // Return results
+            return {
+                payee,
+                nhifDeduction,
+                nssfDeduction,
+                grossSalary,
+                netSalary
+            };
+        }
+
+        // Main program to get input from the user
+        const basicSalary = parseFloat(prompt("Enter your basic salary (in KES):"));
+        const benefits = parseFloat(prompt("Enter your benefits (in KES):"));
+
+        if (!isNaN(basicSalary) && basicSalary >= 0 && !isNaN(benefits) && benefits >= 0) {
+            const salaryDetails = calculateNetSalary(basicSalary, benefits);
+            alert(`PAYE: KES ${salaryDetails.payee.toFixed(2)}\n` +
+                  `NHIF Deduction: KES ${salaryDetails.nhifDeduction.toFixed(2)}\n` +
+                  `NSSF Deduction: KES ${salaryDetails.nssfDeduction.toFixed(2)}\n` +
+                  `Gross Salary: KES ${salaryDetails.grossSalary.toFixed(2)}\n` +
+                  `Net Salary: KES ${salaryDetails.netSalary.toFixed(2)}`);
+        } else {
+            alert("Invalid input! Please enter valid salary and benefits.");
+        }
+    </script>
+</body>
+</html>
